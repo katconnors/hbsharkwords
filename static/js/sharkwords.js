@@ -1,3 +1,6 @@
+
+//collab with Nadia
+
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
 const WORDS = [
   'strawberry',
@@ -49,8 +52,18 @@ const isLetterInWord = (letter) => document.querySelector(`div.${letter}`) !== n
 
 // Called when `letter` is in word. Update contents of divs with `letter`.
 //
+
+
 const handleCorrectGuess = (letter) => {
-  // Replace this with your code
+  // look in the document for all classes that are letter
+  const letterString = `.${letter}`;
+  const letterDivs = document.querySelectorAll(`.${letter}`);
+  console.log(letterDivs)
+  console.log(letterString)
+  for (div of letterDivs){
+    console.log(div)
+    div.innerHTML = letter;
+  }
 };
 
 //
@@ -60,10 +73,27 @@ const handleCorrectGuess = (letter) => {
 // If the shark gets the person (5 wrong guesses), disable
 // all buttons and show the "play again" message.
 
-const handleWrongGuess = () => {
+const handleWrongGuess = ('submit', () => {
   numWrong += 1;
-  // Replace this with your code
-};
+  //change the image
+  if (numWrong <= 5){
+    
+    const sharkPhoto = document.querySelector('img');
+    sharkPhoto.getAttribute('src');
+    sharkPhoto.setAttribute('src',`/static/images/guess${numWrong}.png`);
+  }
+
+  if (numWrong === 5) {
+    //hide the buttons
+    document.querySelector('#letter-buttons').style.display = 'none'; 
+    //unhide the a element
+    document.querySelector('#play-again').style.display = ''; 
+  }  
+  console.log(numWrong);
+  //alert for game end
+  //  alert('Play again');
+
+});
 
 //  Reset game state. Called before restarting the game.
 const resetGame = () => {
@@ -76,12 +106,29 @@ const resetGame = () => {
   // For now, we'll hardcode the word that the user has to guess.
   const word = 'hello';
 
+  const resetLink = document.querySelector('#play-again');
+  resetLink.addEventListener('click', resetGame);
+
   createDivsForChars(word);
   generateLetterButtons();
 
+  
   for (const button of document.querySelectorAll('button')) {
     // add an event handler to handle clicking on a letter button
-    // YOUR CODE HERE
+    // YOUR CODE HERE;
+    button.addEventListener('click', () => {
+      const letter = button.innerHTML; 
+
+      disableLetterButton(letter);
+      console.log(letter);
+      if (word.includes(letter)){
+        handleCorrectGuess(letter);
+      } 
+      else {
+        handleWrongGuess(letter);
+      }
+    })
+    
   }
 
   // add an event handler to handle clicking on the Play Again button
